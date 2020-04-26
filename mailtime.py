@@ -77,14 +77,14 @@ def schedule(emails, subj, body):
         except:
             keepGoing = True
             print ("Date forman not valid, please try again")
-    cron = CronTab(user='jon')
+    cron = CronTab(user=True)
     randnum = str(random.randint(1, 1000))
     filename = ".email" + randnum + ".txt"
     file = open(filename, 'w')
     file.write(body)
     file.close()
     filename = os.getcwd() +"/" +  filename
-    print(filename)
+   
     cmd = cmd + " < " + filename + " && rm " +  filename
 
     job = cron.new(command=cmd)
