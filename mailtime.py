@@ -1,4 +1,4 @@
-#!/opt/anaconda3/bin/python
+#!/bin/python
 
 
 import re #processes regex
@@ -100,9 +100,9 @@ def schedule(emails, subj, body):
     file.write(body)
     file.close()
     filename = os.getcwd() +"/" +  filename
-   
-    cmd = cmd + " < " + filename + " && rm " +  filename + " | at " + str(date)
-
+    atTime = date.strftime("%H:%M %x")
+    cmd = cmd + " < " + filename + " && rm " +  filename + " | at " + atTime
+    os.system(cmd)
     print ("Email scheduled for " + str(date))
 
 
