@@ -101,7 +101,7 @@ def schedule(emails, subj, body):
     file.close()
     filename = os.getcwd() +"/" +  filename
     atTime = date.strftime("%H:%M %x")
-    cmd = cmd + " < " + filename + " && rm " +  filename + " | at " + atTime
+    cmd = "echo '" +  cmd + " < " + filename + " && rm " +  filename + "' | at " + atTime
     os.system(cmd)
     print ("Email scheduled for " + str(date))
 
