@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/opt/anaconda3/bin/python
 
 
 import re #processes regex
@@ -80,19 +80,18 @@ def schedule(emails, subj, body):
     #user inputs date, must be a proper date
     while keepGoing:
         try:
-            year = getNum('year')
-            month = getNum('month')
-            day = getNum('day')
-            hour = getNum('hour (0-24)')
-            minute = getNum('minute')
+            year = getNum('year (at least 2020)')
+            month = getNum('month (1-12)')
+            day = getNum('day (1-31, depending on the month)')
+            hour = getNum('hour (0-23)')
+            minute = getNum('minute (0-59)')
             keepGoing = False
             date = datetime.datetime(year, month, day, hour, minute) 
         except:
             keepGoing = True
-            print ("Date forman not valid, please try again")
+            print("Date forman not valid, please try again")
 
     #creates a cron job for the email send
-    cron = CronTab(user=True)
     randnum = str(random.randint(1, 1000))
     filename = ".email" + randnum + ".txt"
 
@@ -102,11 +101,8 @@ def schedule(emails, subj, body):
     file.close()
     filename = os.getcwd() +"/" +  filename
    
-    cmd = cmd + " < " + filename + " && rm " +  filename
+    cmd = cmd + " < " + filename + " && rm " +  filename + " | at " + str(date)
 
-    job = cron.new(command=cmd)
-    job.setall(date)
-    cron.write()
     print ("Email scheduled for " + str(date))
 
 
