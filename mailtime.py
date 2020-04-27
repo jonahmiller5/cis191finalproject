@@ -1,17 +1,23 @@
 #!/usr/bin/python3
 
-import re
-import os
+
+import re #processes regex
+import os #lets us un bash commands or get information about the system
 import datetime
-from crontab import CronTab
+from crontab import CronTab #shecdule cron jobs
 import random
 
+
+#method for handling user input
 def user_input():
+
     print("Welcome to the mail scheduler tool")
     print("This tool requires a functioning mail command")
     print("")
+
+    #regex to ensure well formed emails
     regex = re.compile("[a-zA-Z0-9\.]+@[a-zA-Z0-9\.]+\.[a-zA-Z]+")
-    emails = list()
+    emails = list() #list to store input emails
     while (len(emails) == 0):
         rec = input("Who would you like to send the email to?\n")
         emails = regex.findall(rec)
@@ -23,6 +29,8 @@ def user_input():
     
     print("Enter the contents of the email, press enter twice when finished")
     multiline = []
+    
+    #loop continues until the user presses enter twice so that they can inpur multi line emails
     while True:
         line = input()
         if line:
@@ -31,6 +39,7 @@ def user_input():
             break
     body = '\n'.join(multiline)
   
+    #determines to send email now or later
     sendnow = False
     while True:
         now_or_later = input("Would you like to send the email now [y/n]")
@@ -50,6 +59,7 @@ def user_input():
     else:
         send_email(emails, subj, body)
 
+#method for sending email right now
 def send_email(emails, subj, body):
    
     file = open(".sendnow.txt", 'w')
@@ -61,10 +71,13 @@ def send_email(emails, subj, body):
     os.system("rm .sendnow.txt")
     print ("email sent")
 
+#shedules the email for a lter date
 def schedule(emails, subj, body):
     cmd = baseCommand(emails, subj)
     keepGoing = True
     date = datetime.datetime(2020, 1, 1)
+
+    #user inputs date, must be a proper date
     while keepGoing:
         try:
             year = getNum('year')
@@ -77,9 +90,13 @@ def schedule(emails, subj, body):
         except:
             keepGoing = True
             print ("Date forman not valid, please try again")
+
+    #creates a cron job for the email send
     cron = CronTab(user=True)
     randnum = str(random.randint(1, 1000))
     filename = ".email" + randnum + ".txt"
+
+    #writes the body of the messge in a random txt file that will be removed after the email is sent
     file = open(filename, 'w')
     file.write(body)
     file.close()
@@ -93,17 +110,18 @@ def schedule(emails, subj, body):
     print ("Email scheduled for " + str(date))
 
 
-
+#forms base command for sending email
 def baseCommand(emails, subj):
     list_emails = ' '.join(emails)  
     cmd =  "mail -s ' " + subj + "' " + list_emails 
     return cmd
 
+#helper method for scheduling emails
 def getNum(type): 
     return  int (input("Enter the " + type + " you want the email sent: "))
  
 
-
+#Main method, starts by getting user input
 if __name__ == '__main__':
     user_input()
     
