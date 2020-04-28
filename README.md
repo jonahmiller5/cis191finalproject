@@ -1,5 +1,6 @@
 # CIS 191 Final Project: a script to schedule and send emails
 
+Instructions to setup and execute
 1) // TODO: set up postfix instructions
 2) Navigate to the directory in which the script is located
 3) Execute by typing “./mailtime.py”
