@@ -1,4 +1,4 @@
-# cis191finalproject
+# CIS 191 Final Project: a script to schedule and send emails
 
 1) // TODO: set up postfix instructions
 2) Navigate to the directory in which the script is located
