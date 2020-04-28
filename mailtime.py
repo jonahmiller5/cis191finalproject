@@ -1,10 +1,8 @@
-#!/bin/python
-
+#!/bin/python3
 
 import re #processes regex
 import os #lets us un bash commands or get information about the system
 import datetime
-from crontab import CronTab #shecdule cron jobs
 import random
 
 
@@ -68,6 +66,7 @@ def send_email(emails, subj, body):
     cmd = baseCommand(emails, subj) 
     cmd = cmd + " < .sendnow.txt"
     os.system(cmd)
+    print(cmd)
     os.system("rm .sendnow.txt")
     print ("email sent")
 
@@ -89,7 +88,7 @@ def schedule(emails, subj, body):
             date = datetime.datetime(year, month, day, hour, minute) 
         except:
             keepGoing = True
-            print("Date forman not valid, please try again")
+            print("Date format not valid, please try again")
 
     #creates a cron job for the email send
     randnum = str(random.randint(1, 1000))
@@ -109,7 +108,7 @@ def schedule(emails, subj, body):
 #forms base command for sending email
 def baseCommand(emails, subj):
     list_emails = ' '.join(emails)  
-    cmd =  "mail -s ' " + subj + "' " + list_emails 
+    cmd =  "mail -s \" " + subj + "\" " + list_emails 
     return cmd
 
 #helper method for scheduling emails
