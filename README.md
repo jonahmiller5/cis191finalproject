@@ -43,5 +43,6 @@ atd.service
 postfix.service
 
 
+To run type in ./mailtime.py and follow the directions, make sure the email adresses and dates you enter are valid to you will be reprompted
 
 

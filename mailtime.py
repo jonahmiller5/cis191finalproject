@@ -4,13 +4,11 @@ import re #processes regex
 import os #lets us un bash commands or get information about the system
 import datetime
 import random
-
-
 #method for handling user input
 def user_input():
 
-    print("Welcome to the mail scheduler tool")
-    print("This tool requires a functioning mail command")
+    print("Welcome to the mail scheduler tool.")
+    print("This tool requires a functioning mail command. Please see setup instructions in the readme.")
     print("")
 
     #regex to ensure well formed emails
@@ -21,11 +19,11 @@ def user_input():
         emails = regex.findall(rec)
         if len(emails) == 0:
             print("Email format not recognized, please try again\n")
-        print("")
     
     subj = input("What is the subject of the email?\n")
     
     print("Enter the contents of the email, press enter twice when finished")
+
     multiline = []
     
     #loop continues until the user presses enter twice so that they can inpur multi line emails
@@ -49,13 +47,13 @@ def user_input():
             sendnow = False
             break
         else:
-            print ("input not recognized")
-            print ("")
+            print ("Input not recognized. Please try again\n")
     
     if not sendnow :
         schedule (emails, subj, body)
     else:
         send_email(emails, subj, body)
+
 
 #method for sending email right now
 def send_email(emails, subj, body):
@@ -68,9 +66,10 @@ def send_email(emails, subj, body):
     os.system(cmd)
     print(cmd)
     os.system("rm .sendnow.txt")
-    print ("email sent")
+    print ("Email sent successfully!")
 
-#shedules the email for a lter date
+
+#shedules the email for a later date
 def schedule(emails, subj, body):
     cmd = baseCommand(emails, subj)
     keepGoing = True
@@ -81,14 +80,16 @@ def schedule(emails, subj, body):
         try:
             year = getNum('year (at least 2020)')
             month = getNum('month (1-12)')
-            day = getNum('day (1-31, depending on the month)')
+            day = getNum('day (1-31, depends on the month)')
             hour = getNum('hour (0-23)')
             minute = getNum('minute (0-59)')
             keepGoing = False
             date = datetime.datetime(year, month, day, hour, minute) 
         except:
             keepGoing = True
-            print("Date format not valid, please try again")
+            print("Date format not valid, please try again.")
+            
+        
 
     #creates a cron job for the email send
     randnum = str(random.randint(1, 1000))
@@ -98,7 +99,7 @@ def schedule(emails, subj, body):
     file = open(filename, 'w')
     file.write(body)
     file.close()
-    filename = os.getcwd() +"/" +  filename
+    filename = os.getcwd() + "/" +  filename
     atTime = date.strftime("%H:%M %x")
     cmd = "echo '" +  cmd + " < " + filename + " && rm " +  filename + "' | at " + atTime
     os.system(cmd)
@@ -111,12 +112,12 @@ def baseCommand(emails, subj):
     cmd =  "mail -s \" " + subj + "\" " + list_emails 
     return cmd
 
+
 #helper method for scheduling emails
 def getNum(type): 
     return  int (input("Enter the " + type + " you want the email sent: "))
- 
+
 
 #Main method, starts by getting user input
 if __name__ == '__main__':
     user_input()
-    
